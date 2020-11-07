@@ -92,6 +92,30 @@ def stations():
     stations = {stations[i]:stations[i + 1] for i in range(0, len(stations),2)}
     # jsonify results
     return jsonify(stations)
+#################################################
+# TOBS route
+@app.route("/api/v1.0/tobs")
+def tobs():
+    print("Server received request for 'TOBS' page...")
+    # create session to link to database
+    session= Session(engine)
+    # query dates and temperatures for most active station for the last year of data
+    # dates from climate notebook is "2016-08-23"
+    last_year_date = '2016-08-23'
+    most_active = 'USC00519281'
+    results = session.query(Measurement.date, Measurement.tobs).filter(Measurement.station == most_active).filter(Measurement.date > last_year_date).all()
+    # close session
+    session.close
+    # return json list of temperature observations for previous year
+    return jsonify(results)
+#################################################
+# min_max_avg_start_date route
+
+
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)
