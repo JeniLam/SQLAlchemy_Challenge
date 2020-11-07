@@ -27,3 +27,16 @@ Station = Base.classes.station
 # Flask Setup
 #################################################
 app = Flask(__name__)
+
+#################################################
+# Flask Routes
+#################################################
+
+@app.route("/")
+def index():
+    print("Server received request for 'Home' page...")
+    return(f"Welcome to my SQL Alchemy API")
+
+
+if __name__ == "__main__":
+    app.run(debug=True)
