@@ -75,7 +75,23 @@ def precipitation():
     precipitation = {precipitation[i]:precipitation[i +1] for i in range(0, len (precipitation), 2)}
     # jsonify results
     return jsonify(precipitation)
-    
+#################################################
+# stations route
+@app.route("/api/v1.0/stations")
+def stations():
+    print("Server received request for 'Stations' page...")
+    # create session to link to database
+    session= Session(engine)
+    # query data to get stations list
+    results = session.query(Station.station, Station.name).all()
+    # close session
+    session.close
+    # Convert list of tuples into normal list
+    stations = list(np.ravel(results))
+    # convert list to dictionary
+    stations = {stations[i]:stations[i + 1] for i in range(0, len(stations),2)}
+    # jsonify results
+    return jsonify(stations)
 
 if __name__ == "__main__":
     app.run(debug=True)
