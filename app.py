@@ -35,7 +35,26 @@ app = Flask(__name__)
 @app.route("/")
 def index():
     print("Server received request for 'Home' page...")
-    return(f"Welcome to my SQL Alchemy API")
+    return(
+        f"Welcome to my SQL Alchemy API for Hawaii Climate<br/>"
+        f"<br/>" 
+        f"Available routes:<br/>"
+        f"<br/>" 
+        f"Precipitation data with dates:<br/>"
+        f"/api/v1.0/precipitation<br/>"
+        f"<br/>"
+        f"List of stations and names:<br/>"
+        f"/api/v1.0/stations<br/>"
+        f"<br/>"
+        f"List of temperture observations a year from the last data point:<br/>"
+        f"/api/v1.0/tobs<br/>"
+        f"<br/>"
+        f"Min, Max. and Avg. temperatures for given start date: (please use 'yyyy-mm-dd' format):<br/>"
+        f"/api/v1.0/min_max_avg_start_date_only<br/>"
+        f"<br/>"
+        f"Min, Max. and Avg. temperatures for given start date and end date: (please use 'yyyy-mm-dd' format):<br/>"
+        f"/api/v1.0/min_max_avg_start_date_and_end_date<br/>"
+        )
 
 
 if __name__ == "__main__":
