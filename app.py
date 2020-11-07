@@ -34,7 +34,9 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
+    # print goes to terminal
     print("Server received request for 'Home' page...")
+    # return goes to API page
     return(
         f"Welcome to my SQL Alchemy API for Hawaii Climate<br/>"
         f"<br/>" 
@@ -55,7 +57,25 @@ def index():
         f"Min, Max. and Avg. temperatures for given start date and end date: (please use 'yyyy-mm-dd' format):<br/>"
         f"/api/v1.0/min_max_avg_start_date_and_end_date<br/>"
         )
-
+#################################################
+# precipitation route
+@app.route("/api/v1.0/precipitation")
+def precipitation():
+    print("Server received request for 'Precipication' page...")
+    # create session to link to database
+    session= Session(engine)
+    # return a list of all Precipitation dates through a query
+    results = session.query(Measurement.date, Measurement.prcp).all()
+    # close session
+    session.close
+    # Convert list of tuples into normal list from day 3 activity 10
+    precipitation = list(np.ravel(results))
+    # convert list to dictionary
+    # https://www.geeksforgeeks.org/python-convert-a-list-to-dictionary/
+    precipitation = {precipitation[i]:precipitation[i +1] for i in range(0, len (precipitation), 2)}
+    # jsonify results
+    return jsonify(precipitation)
+    
 
 if __name__ == "__main__":
     app.run(debug=True)
