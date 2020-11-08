@@ -52,10 +52,10 @@ def index():
         f"/api/v1.0/tobs<br/>"
         f"<br/>"
         f"Min, Max. and Avg. temperatures for given start date: (please use 'yyyy-mm-dd' format):<br/>"
-        f"/api/v1.0/min_max_avg_start_date_only<br/>"
+        f"/api/v1.0/min_avg_max/<start date><br/>"
         f"<br/>"
-        f"Min, Max. and Avg. temperatures for given start date and end date: (please use 'yyyy-mm-dd' format):<br/>"
-        f"/api/v1.0/min_max_avg_start_date_and_end_date<br/>"
+        f"Min, Max. and Avg. temperatures for given start date and end date: (please use 'yyyy-mm-dd'/'yyyy-mm-dd'format):<br/>"
+        f"/api/v1.0/min_avg_max/<start date>/<end date><br/>"
         )
 #################################################
 # precipitation route
@@ -67,7 +67,7 @@ def precipitation():
     # return a list of all Precipitation dates through a query
     results = session.query(Measurement.date, Measurement.prcp).all()
     # close session
-    session.close
+    session.close()
     # Convert list of tuples into normal list from day 3 activity 10
     precipitation = list(np.ravel(results))
     # convert list to dictionary
@@ -85,7 +85,7 @@ def stations():
     # query data to get stations list
     results = session.query(Station.station, Station.name).all()
     # close session
-    session.close
+    session.close()
     # Convert list of tuples into normal list
     stations = list(np.ravel(results))
     # convert list to dictionary
@@ -105,11 +105,32 @@ def tobs():
     most_active = 'USC00519281'
     results = session.query(Measurement.date, Measurement.tobs).filter(Measurement.station == most_active).filter(Measurement.date > last_year_date).all()
     # close session
-    session.close
+    session.close()
     # return json list of temperature observations for previous year
     return jsonify(results)
 #################################################
 # min_max_avg_start_date route
+@app.route("/api/v1.0/min_avg_max/<start_date>")
+# activity 8 day 3
+def only_start_date(start_date):
+    print("Server received request for 'start_date_only' page...")
+    # create session to link to database
+    session = Session(engine)
+    # When given the start only, calculate TMIN, TAVG, and TMAX for all dates greater than and equal to the start date.
+    results = session.query(func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)).filter(Measurement.date >=start_date).all()
+    session.close()
+    # activity 10 day 3
+    start_date_list = []
+    for min, avg, max in results:
+        start_date_dict = {}
+        start_date_dict['min_temp'] = min
+        start_date_dict["avg_temp"] = avg
+        start_date_dict['max_temp'] = max
+        start_date_list.append(start_date_dict)
+    return jsonify (start_date_list)
+
+
+
 
 
 
