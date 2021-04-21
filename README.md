@@ -58,6 +58,3 @@ After initial analysys designed a Flask API based on the queries above.
 - Loaded the list of daily normals into a Pandas DataFrame and set the index equal to the date.
 - Utilized Pandas (MatPlotLib) to plot an area plot (stacked=False) for the daily normals.
 
-
-Copyright
-Trilogy Education Services © 2020. All Rights Reserved.
